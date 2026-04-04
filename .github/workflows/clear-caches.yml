@@ -1,0 +1,49 @@
+name: Clear cache
+
+# Trigger ini berjalan setelah workflow "Android CI and CD" selesai
+on:
+  workflow_run:
+    workflows: ["Android CI and CD"]
+    types:
+      - completed
+
+permissions:
+  actions: write  # Izin untuk menghapus cache
+
+jobs:
+  clear-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clear cache
+        uses: actions/github-script@v6
+        with:
+          script: |
+            console.log("Starting cache cleanup process")
+            try {
+              // Mendapatkan daftar cache
+              const caches = await github.rest.actions.getActionsCacheList({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+              })
+
+              // Mengecek apakah ada cache
+              if (caches.data.actions_caches.length === 0) {
+                console.log("No caches found to delete.")
+              } else {
+                // Loop melalui semua cache dan hapus satu per satu
+                for (const cache of caches.data.actions_caches) {
+                  console.log(`Deleting cache ID: ${cache.id}, key: ${cache.key}`)
+                  await github.rest.actions.deleteActionsCacheById({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    cache_id: cache.id,
+                  })
+                }
+                console.log("All caches have been deleted.")
+              }
+            } catch (error) {
+              // Menangani error selama proses penghapusan cache
+              console.error("Error occurred while clearing caches:", error)
+            }
+
+
