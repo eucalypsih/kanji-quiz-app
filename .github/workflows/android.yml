@@ -49,6 +49,7 @@ jobs:
 
     - name: Copy APK files to a directory
       run: |
+         cd app
          ls
          mkdir -p apk-files/debug apk-files/release
          
