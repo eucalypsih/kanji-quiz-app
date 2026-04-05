@@ -10,6 +10,9 @@ buildscript {
     }
 }
 
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
 allprojects {
     repositories {
         google()
