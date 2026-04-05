@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdkVersion 33  // Sesuaikan dengan versi SDK terbaru yang diinginkan
 
     defaultConfig {
         applicationId "com.example.kanjiquiz"
