@@ -1,7 +1,7 @@
 // app/build.gradle
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
+    id 'kotlin-android' version '1.8.0'
 }
 
 android {
