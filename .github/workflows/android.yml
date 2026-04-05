@@ -32,13 +32,7 @@ jobs:
           
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-      
-    - name: Gradle Clean
-      run: ./gradlew clean
-      
-    - name: Gradle Lint
-      run: ./gradlew lint
-      
+
     - name: Gradle Build and generating apk files
       run: ./gradlew build
 
