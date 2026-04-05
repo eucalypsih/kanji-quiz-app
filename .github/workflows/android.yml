@@ -2,44 +2,70 @@ name: Android CI and CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: 
+      - main
+      - qa
+      - develop
+  pull_request:
+    branches: 
+      - main
+      - qa
+
+env:
+  AWS_DEFAULT_REGION: "ap-south-1"
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on:
+       - ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name : Check out Git Repository
+      uses: actions/checkout@v3
 
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+    - name: set up JDK 11
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+          
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Gradle Clean
+      run: ./gradlew clean
+      
+    - name: Gradle Lint
+      run: ./gradlew lint
+      
+    - name: Gradle Build and generating apk files
+      run: ./gradlew build
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+    - name: Cache Gradle packages
+      uses: actions/cache@v1
+      with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
 
-      - name: Gradle Clean
-        run: ./gradlew clean
+    - name: Date and Time
+      run: echo "::set-output name=current_date_time::$(date +"%d-%m-%Y-%H-%I-%M-%S")"
+      id : date
 
-      - name: Gradle Lint
-        run: ./gradlew lint
-
-      - name: Build APK
-        run: ./gradlew assembleDebug
-
-      - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-            path: ~/.gradle/caches
-            key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-            restore-keys: ${{ runner.os }}-gradle
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug.apk
-          path: app/build/outputs/apk/debug/app-debug.apk
-
+    - name: Copy APK files to a directory
+      run: |
+         mkdir -p apk-files/debug apk-files/release
+         
+         cp ${{ github.workspace }}/app/build/outputs/apk/dev/debug/app-dev-debug.apk ${{ github.workspace }}/apk-files/debug/app-debug.apk 
+         mv ${{ github.workspace }}/apk-files/debug/app-debug.apk ${{ github.workspace }}/apk-files/debug/app-debug-${{ steps.date.outputs.current_date_time }}.apk
+         
+         cp ${{ github.workspace }}/app/build/outputs/apk/dev/release/app-dev-release-unsigned.apk ${{ github.workspace }}/apk-files/release/app-release-unsigned.apk
+         mv ${{ github.workspace }}/apk-files/release/app-release-unsigned.apk ${{ github.workspace }}/apk-files/release/app-release-unsigned-${{ steps.date.outputs.current_date_time }}.apk
+      
+    - name: Upload apk-files Directory
+      uses: actions/upload-artifact@v3
+      with:
+        name: apk-files-artifactory
+        path: ${{ github.workspace }}/apk-files/
+        if-no-files-found: ignore
