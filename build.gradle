@@ -1,17 +1,19 @@
 // build.gradle (Project)
 buildscript {
+    ext.kotlin_version = '1.8.0' // ganti sesuai versi Kotlin yang Anda inginkan
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath 'com.android.tools.build:gradle:8.0.0' // Pastikan ini sesuai versi Android Gradle Plugin Anda
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version'
         // Tambahkan classpath lain jika perlu
     }
 }
 
 // apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+// apply plugin: 'kotlin-android'
 // apply plugin: 'com.android.internal.application'
 
 allprojects {
