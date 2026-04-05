@@ -34,7 +34,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Gradle Build and generating apk files
-      run: ./gradlew assembleDebug
+      run: ./gradlew build
 
     - name: Cache Gradle packages
       uses: actions/cache@v3
