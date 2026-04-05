@@ -49,9 +49,10 @@ jobs:
 
     - name: Copy APK files to a directory
       run: |
+         ls
          mkdir -p apk-files/debug apk-files/release
          
-         cp ${{ github.workspace }}/app/build/outputs/apk/dev/debug/app-dev-debug.apk ${{ github.workspace }}/apk-files/debug/app-debug.apk 
+         cp ${{ github.workspace }}/app/build/outputs/apk//debug/app-dev-debug.apk ${{ github.workspace }}/apk-files/debug/app-debug.apk 
          mv ${{ github.workspace }}/apk-files/debug/app-debug.apk ${{ github.workspace }}/apk-files/debug/app-debug-${{ steps.date.outputs.current_date_time }}.apk
          
 #         cp ${{ github.workspace }}/app/build/outputs/apk/dev/release/app-dev-release-unsigned.apk ${{ github.workspace }}/apk-files/release/app-release-unsigned.apk
