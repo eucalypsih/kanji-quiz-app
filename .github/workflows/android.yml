@@ -54,8 +54,8 @@ jobs:
          cp ${{ github.workspace }}/app/build/outputs/apk/dev/debug/app-dev-debug.apk ${{ github.workspace }}/apk-files/debug/app-debug.apk 
          mv ${{ github.workspace }}/apk-files/debug/app-debug.apk ${{ github.workspace }}/apk-files/debug/app-debug-${{ steps.date.outputs.current_date_time }}.apk
          
-         cp ${{ github.workspace }}/app/build/outputs/apk/dev/release/app-dev-release-unsigned.apk ${{ github.workspace }}/apk-files/release/app-release-unsigned.apk
-         mv ${{ github.workspace }}/apk-files/release/app-release-unsigned.apk ${{ github.workspace }}/apk-files/release/app-release-unsigned-${{ steps.date.outputs.current_date_time }}.apk
+#         cp ${{ github.workspace }}/app/build/outputs/apk/dev/release/app-dev-release-unsigned.apk ${{ github.workspace }}/apk-files/release/app-release-unsigned.apk
+#         mv ${{ github.workspace }}/apk-files/release/app-release-unsigned.apk ${{ github.workspace }}/apk-files/release/app-release-unsigned-${{ steps.date.outputs.current_date_time }}.apk
       
     - name: Upload apk-files Directory
       uses: actions/upload-artifact@v4
