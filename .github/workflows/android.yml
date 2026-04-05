@@ -34,7 +34,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Gradle Build and generating apk files
-      run: ./gradlew build
+      run: ./gradlew assembleDebug
 
     - name: Cache Gradle packages
       uses: actions/cache@v3
@@ -49,8 +49,7 @@ jobs:
 
     - name: Copy APK files to a directory
       run: |
-         cd app
-         ls
+         ls ${{ github.workspace }}/app/
          mkdir -p apk-files/debug apk-files/release
          
          cp ${{ github.workspace }}/app/build/outputs/apk//debug/app-dev-debug.apk ${{ github.workspace }}/apk-files/debug/app-debug.apk 
